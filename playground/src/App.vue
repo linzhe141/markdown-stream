@@ -1,10 +1,10 @@
 <script setup lang="ts">
-import { ref } from "vue";
+import { onMounted, ref } from "vue";
 import { md } from "./md";
 import { createMarkdownStreamRender } from "../../src";
 const container = ref<Element | null>(null);
 const disabled = ref(false);
-function createStream(text: string, chunkSize = 10, delay = 50) {
+function createStream(text: string, chunkSize = 10, delay = 150) {
   let position = 0;
 
   return new ReadableStream({
@@ -37,6 +37,7 @@ async function clickHandle() {
   await createMarkdownStreamRender(stream, containerDom);
   disabled.value = false;
 }
+onMounted(clickHandle);
 </script>
 <template>
   <div class="w-screen h-screen py-16 mx-auto max-w-[800px]">
@@ -84,6 +85,7 @@ async function clickHandle() {
       ref="container"
       style="max-width: 100%"
     ></div>
+    <div class="h-[100px]"></div>
   </div>
 </template>
 <
