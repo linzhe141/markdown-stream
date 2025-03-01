@@ -1,8 +1,8 @@
-name: Deploy example to Pages
+name: Deploy playground to Pages
 
 on:
   push:
-    branches: ['main']
+    branches: ["main"]
 
   workflow_dispatch:
 
@@ -13,7 +13,7 @@ permissions:
 
 # Allow one concurrent deployment
 concurrency:
-  group: 'pages'
+  group: "pages"
   cancel-in-progress: true
 
 jobs:
@@ -41,7 +41,7 @@ jobs:
         run: pnpm install
 
       - name: Build
-        run: pnpm run build:example
+        run: pnpm run build:playground
 
       - name: Setup Pages
         uses: actions/configure-pages@v4
@@ -50,7 +50,7 @@ jobs:
         uses: actions/upload-pages-artifact@v3
         with:
           # Upload dist folder
-          path: './examples/dist'
+          path: "./playground/dist"
 
       - name: Deploy to GitHub Pages
         id: deployment
