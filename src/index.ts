@@ -14,7 +14,6 @@ export async function createMarkdownStreamRender(
     const { done, value } = await reader.read();
     if (done) break;
     const { type, chunk, operate } = value as ChunkData;
-    console.log("zzzzzz", value.type, value.chunk);
     if (operate === "blockOpen") {
       if (type === "text") {
         const dom = document.createElement("p");
