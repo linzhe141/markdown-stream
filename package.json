@@ -1,7 +1,7 @@
 {
   "name": "markdown-streamx",
-  "version": "0.0.1",
-  "description": "",
+  "version": "0.0.2",
+  "description": "Tranform a stream of Markdown into HTML",
   "main": "./dist/index.js",
   "module": "./dist/index.js",
   "types": "./dist/src/index.d.ts",
@@ -17,7 +17,8 @@
   "keywords": [
     "stream",
     "markdown",
-    "stream-markdown"
+    "stream-markdown",
+    "markdown to html"
   ],
   "repository": {
     "type": "git",
