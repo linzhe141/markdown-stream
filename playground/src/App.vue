@@ -1,7 +1,11 @@
 <script setup lang="ts">
 import { onMounted, ref } from "vue";
 import { md } from "./md";
-import { createMarkdownStreamRender } from "../../src";
+import {
+  createMarkdownStreamRender,
+  getMarkdownStreamAst,
+  processMarkdownStreamChunk,
+} from "../../src";
 const container = ref<Element | null>(null);
 const disabled = ref(false);
 function createStream(text: string, chunkSize = 10, delay = 150) {
@@ -34,7 +38,11 @@ async function clickHandle() {
   const stream = createStream(md);
   const containerDom = container.value!;
   containerDom.innerHTML = "";
-  await createMarkdownStreamRender(stream, containerDom);
+  // await createMarkdownStreamRender(stream, containerDom);
+  // console.log(await getMarkdownStreamAst(stream));
+  processMarkdownStreamChunk(stream, (ast) => {
+    console.log(ast);
+  });
   disabled.value = false;
 }
 onMounted(clickHandle);

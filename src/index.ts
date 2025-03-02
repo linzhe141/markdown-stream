@@ -76,6 +76,31 @@ export async function createMarkdownStreamRender(
   }
 }
 
+export async function getMarkdownStreamAst(stream: ReadableStream) {
+  const transformedStream = createStreamTransform(stream);
+  const ast: ChunkData[] = [];
+  const reader = transformedStream.getReader();
+  while (true) {
+    const { done, value } = await reader.read();
+    if (done) break;
+    ast.push(value);
+  }
+  return ast;
+}
+
+export async function processMarkdownStreamChunk(
+  stream: ReadableStream,
+  handler: (ast: ChunkData) => void
+) {
+  const transformedStream = createStreamTransform(stream);
+  const reader = transformedStream.getReader();
+  while (true) {
+    const { done, value } = await reader.read();
+    if (done) break;
+    handler(value);
+  }
+}
+
 function injectCopyToClipboard() {
   if ((window as any)._smd_copyToClipboard__) return;
   (window as any)._smd_copyToClipboard__ = function (wrapper: Element) {
