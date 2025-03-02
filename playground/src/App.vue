@@ -40,17 +40,17 @@ async function clickHandle() {
 onMounted(clickHandle);
 </script>
 <template>
-  <div class="w-screen h-screen py-16 mx-auto max-w-[800px]">
+  <div class="mx-auto h-screen w-screen max-w-[800px] py-16">
     <div class="flex items-center justify-between">
       <button
-        class="flex bg-[#0a0a0a] text-white py-3 px-4 rounded-sm border border-[#262626] hover:bg-[#262626]"
+        class="flex rounded-sm border border-[#262626] bg-[#0a0a0a] px-4 py-3 text-white hover:bg-[#262626]"
         :class="{
           'cursor-not-allowed': disabled,
           'cursor-pointer': !disabled,
         }"
         @click="clickHandle"
       >
-        <div v-if="disabled" class="animate-spin size-6 mr-2">
+        <div v-if="disabled" class="mr-2 size-6 animate-spin">
           <svg
             xmlns="http://www.w3.org/2000/svg"
             width="24px"
@@ -81,7 +81,7 @@ onMounted(clickHandle);
       ></a>
     </div>
     <div
-      class="my-10 prose mt-10 dark:prose-invert"
+      class="prose dark:prose-invert my-10 mt-10"
       ref="container"
       style="max-width: 100%"
     ></div>
