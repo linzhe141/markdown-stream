@@ -1,0 +1,30 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`basic  strong 1`] = `
+[
+  "{"operate":"blockOpen","type":"strongOpen","chunk":"**"}",
+  "{"operate":"append","type":"strong","chunk":"xxxx"}",
+  "{"operate":"append","type":"strongClose","chunk":"**"}",
+  "{"operate":"blockOpen","type":"strongOpen","chunk":"**"}",
+  "{"operate":"append","type":"inlineCodeOpen","chunk":"\`"}",
+  "{"operate":"append","type":"inlineCode","chunk":"linzhe"}",
+  "{"operate":"append","type":"inlineCodeClose","chunk":"\`"}",
+  "{"operate":"append","type":"strongClose","chunk":"**"}",
+]
+`;
+
+exports[`strong with inline code 1`] = `
+[
+  "{"operate":"blockOpen","type":"text","chunk":"aaa"}",
+  "{"operate":"append","type":"strongOpen","chunk":"**"}",
+  "{"operate":"append","type":"inlineCodeOpen","chunk":"\`"}",
+  "{"operate":"append","type":"inlineCode","chunk":"bar"}",
+  "{"operate":"append","type":"inlineCodeClose","chunk":"\`"}",
+  "{"operate":"append","type":"strong","chunk":" foo "}",
+  "{"operate":"append","type":"inlineCodeOpen","chunk":"\`"}",
+  "{"operate":"append","type":"inlineCode","chunk":"zzz"}",
+  "{"operate":"append","type":"inlineCodeClose","chunk":"\`"}",
+  "{"operate":"append","type":"strongClose","chunk":"**"}",
+  "{"operate":"append","type":"text","chunk":"bbb"}",
+]
+`;

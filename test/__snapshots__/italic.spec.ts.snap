@@ -1,0 +1,74 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`basic  italic 1`] = `
+[
+  "{"operate":"blockOpen","type":"italicOpen","chunk":"*"}",
+  "{"operate":"append","type":"italic","chunk":"foo"}",
+  "{"operate":"append","type":"inlineCodeOpen","chunk":"\`"}",
+  "{"operate":"append","type":"inlineCode","chunk":"bar"}",
+  "{"operate":"append","type":"inlineCodeClose","chunk":"\`"}",
+  "{"operate":"append","type":"italic","chunk":"zzzzzzzz"}",
+  "{"operate":"append","type":"italicClose","chunk":"*"}",
+  "{"operate":"append","type":"text","chunk":"g"}",
+  "{"operate":"append","type":"text","chunk":"gg"}",
+  "{"operate":"blockOpen","type":"italicOpen","chunk":"*"}",
+  "{"operate":"append","type":"italic","chunk":"xxxx"}",
+  "{"operate":"append","type":"italicClose","chunk":"*"}",
+  "{"operate":"blockOpen","type":"italicOpen","chunk":"*"}",
+  "{"operate":"append","type":"inlineCodeOpen","chunk":"\`"}",
+  "{"operate":"append","type":"inlineCode","chunk":"linzhe"}",
+  "{"operate":"append","type":"inlineCodeClose","chunk":"\`"}",
+  "{"operate":"append","type":"italicClose","chunk":"*"}",
+]
+`;
+
+exports[`italic with * 1`] = `
+[
+  "{"operate":"blockOpen","type":"text","chunk":"aaa"}",
+  "{"operate":"append","type":"italicOpen","chunk":"*"}",
+  "{"operate":"append","type":"inlineCodeOpen","chunk":"\`"}",
+  "{"operate":"append","type":"inlineCode","chunk":"bar"}",
+  "{"operate":"append","type":"inlineCodeClose","chunk":"\`"}",
+  "{"operate":"append","type":"italic","chunk":" "}",
+  "{"operate":"append","type":"italic","chunk":"foo "}",
+  "{"operate":"append","type":"inlineCodeOpen","chunk":"\`"}",
+  "{"operate":"append","type":"inlineCode","chunk":"zzz"}",
+  "{"operate":"append","type":"inlineCodeClose","chunk":"\`"}",
+  "{"operate":"append","type":"italicClose","chunk":"*"}",
+  "{"operate":"append","type":"text","chunk":"bbb"}",
+]
+`;
+
+exports[`italic with inline code 1`] = `
+[
+  "{"operate":"blockOpen","type":"text","chunk":"aaa"}",
+  "{"operate":"append","type":"italicOpen","chunk":"*"}",
+  "{"operate":"append","type":"inlineCodeOpen","chunk":"\`"}",
+  "{"operate":"append","type":"inlineCode","chunk":"bar"}",
+  "{"operate":"append","type":"inlineCodeClose","chunk":"\`"}",
+  "{"operate":"append","type":"italic","chunk":" "}",
+  "{"operate":"append","type":"italic","chunk":"foo "}",
+  "{"operate":"append","type":"inlineCodeOpen","chunk":"\`"}",
+  "{"operate":"append","type":"inlineCode","chunk":"zzz"}",
+  "{"operate":"append","type":"inlineCodeClose","chunk":"\`"}",
+  "{"operate":"append","type":"italicClose","chunk":"*"}",
+  "{"operate":"append","type":"text","chunk":"bbb"}",
+]
+`;
+
+exports[`italic with inline code 2`] = `
+[
+  "{"operate":"blockOpen","type":"text","chunk":"aaa"}",
+  "{"operate":"append","type":"italicOpen","chunk":"*"}",
+  "{"operate":"append","type":"inlineCodeOpen","chunk":"\`"}",
+  "{"operate":"append","type":"inlineCode","chunk":"bar"}",
+  "{"operate":"append","type":"inlineCodeClose","chunk":"\`"}",
+  "{"operate":"append","type":"italic","chunk":" "}",
+  "{"operate":"append","type":"italic","chunk":"foo "}",
+  "{"operate":"append","type":"inlineCodeOpen","chunk":"\`"}",
+  "{"operate":"append","type":"inlineCode","chunk":"zzz"}",
+  "{"operate":"append","type":"inlineCodeClose","chunk":"\`"}",
+  "{"operate":"append","type":"italicClose","chunk":"*"}",
+  "{"operate":"append","type":"text","chunk":"bbb"}",
+]
+`;

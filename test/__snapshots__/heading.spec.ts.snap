@@ -1,0 +1,205 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`basic  heading 1`] = `
+[
+  "{"operate":"blockOpen","type":"headingType","chunk":"#"}",
+  "{"operate":"append","type":"headingContent","chunk":"H1H1H1H1"}",
+  "{"operate":"append","type":"headingContent","chunk":"H1"}",
+  "{"operate":"blockOpen","type":"headingType","chunk":"##"}",
+  "{"operate":"append","type":"headingContent","chunk":"H2H2"}",
+  "{"operate":"append","type":"headingContent","chunk":"H2H2H2"}",
+  "{"operate":"blockOpen","type":"headingType","chunk":"###"}",
+  "{"operate":"append","type":"headingContent","chunk":"H3H3H3H3H"}",
+  "{"operate":"append","type":"headingContent","chunk":"3"}",
+]
+`;
+
+exports[`heading with "*" 1`] = `
+[
+  "{"operate":"blockOpen","type":"headingType","chunk":"#"}",
+  "{"operate":"append","type":"italicOpen","chunk":"*"}",
+  "{"operate":"append","type":"inlineCodeOpen","chunk":"\`"}",
+  "{"operate":"append","type":"inlineCode","chunk":"bar"}",
+  "{"operate":"append","type":"inlineCodeClose","chunk":"\`"}",
+  "{"operate":"append","type":"italicClose","chunk":"*"}",
+]
+`;
+
+exports[`heading with "*" 2`] = `
+[
+  "{"operate":"blockOpen","type":"headingType","chunk":"#"}",
+  "{"operate":"append","type":"italicOpen","chunk":"*"}",
+  "{"operate":"append","type":"italic","chunk":"foo"}",
+  "{"operate":"append","type":"italicClose","chunk":"*"}",
+  "{"operate":"append","type":"headingContent","chunk":" "}",
+  "{"operate":"append","type":"inlineCodeOpen","chunk":"\`"}",
+  "{"operate":"append","type":"inlineCode","chunk":"b"}",
+  "{"operate":"append","type":"inlineCode","chunk":"ar"}",
+  "{"operate":"append","type":"inlineCodeClose","chunk":"\`"}",
+]
+`;
+
+exports[`heading with "*" 3`] = `
+[
+  "{"operate":"blockOpen","type":"headingType","chunk":"#"}",
+  "{"operate":"append","type":"inlineCodeOpen","chunk":"\`"}",
+  "{"operate":"append","type":"inlineCode","chunk":"bar"}",
+  "{"operate":"append","type":"inlineCodeClose","chunk":"\`"}",
+  "{"operate":"append","type":"headingContent","chunk":" "}",
+  "{"operate":"append","type":"italicOpen","chunk":"*"}",
+  "{"operate":"append","type":"italic","chunk":"f"}",
+  "{"operate":"append","type":"italic","chunk":"or"}",
+  "{"operate":"append","type":"italicClose","chunk":"*"}",
+]
+`;
+
+exports[`heading with "*" 4`] = `
+[
+  "{"operate":"blockOpen","type":"headingType","chunk":"#"}",
+  "{"operate":"append","type":"italicOpen","chunk":"*"}",
+  "{"operate":"append","type":"inlineCodeOpen","chunk":"\`"}",
+  "{"operate":"append","type":"inlineCode","chunk":"bar"}",
+  "{"operate":"append","type":"inlineCodeClose","chunk":"\`"}",
+  "{"operate":"append","type":"italic","chunk":" f"}",
+  "{"operate":"append","type":"italic","chunk":"or"}",
+  "{"operate":"append","type":"italicClose","chunk":"*"}",
+]
+`;
+
+exports[`heading with "*" 5`] = `
+[
+  "{"operate":"blockOpen","type":"headingType","chunk":"#"}",
+  "{"operate":"append","type":"italicOpen","chunk":"*"}",
+  "{"operate":"append","type":"inlineCodeOpen","chunk":"\`"}",
+  "{"operate":"append","type":"inlineCode","chunk":"bar"}",
+  "{"operate":"append","type":"inlineCodeClose","chunk":"\`"}",
+  "{"operate":"append","type":"italic","chunk":" f"}",
+  "{"operate":"append","type":"italic","chunk":"or"}",
+  "{"operate":"append","type":"italicClose","chunk":"*"}",
+  "{"operate":"append","type":"headingContent","chunk":"zzz"}",
+]
+`;
+
+exports[`heading with "**" 1`] = `
+[
+  "{"operate":"blockOpen","type":"headingType","chunk":"#"}",
+  "{"operate":"append","type":"strongOpen","chunk":"**"}",
+  "{"operate":"append","type":"inlineCodeOpen","chunk":"\`"}",
+  "{"operate":"append","type":"inlineCode","chunk":"bar"}",
+  "{"operate":"append","type":"inlineCodeClose","chunk":"\`"}",
+  "{"operate":"append","type":"strongClose","chunk":"**"}",
+]
+`;
+
+exports[`heading with "**" 2`] = `
+[
+  "{"operate":"blockOpen","type":"headingType","chunk":"#"}",
+  "{"operate":"append","type":"strongOpen","chunk":"**"}",
+  "{"operate":"append","type":"strong","chunk":"foo"}",
+  "{"operate":"append","type":"strongClose","chunk":"**"}",
+  "{"operate":"append","type":"headingContent","chunk":" "}",
+  "{"operate":"append","type":"inlineCodeOpen","chunk":"\`"}",
+  "{"operate":"append","type":"inlineCode","chunk":"bar"}",
+  "{"operate":"append","type":"inlineCodeClose","chunk":"\`"}",
+]
+`;
+
+exports[`heading with "**" 3`] = `
+[
+  "{"operate":"blockOpen","type":"headingType","chunk":"#"}",
+  "{"operate":"append","type":"inlineCodeOpen","chunk":"\`"}",
+  "{"operate":"append","type":"inlineCode","chunk":"bar"}",
+  "{"operate":"append","type":"inlineCodeClose","chunk":"\`"}",
+  "{"operate":"append","type":"headingContent","chunk":" "}",
+  "{"operate":"append","type":"strongOpen","chunk":"**"}",
+  "{"operate":"append","type":"strong","chunk":"for"}",
+  "{"operate":"append","type":"strongClose","chunk":"**"}",
+]
+`;
+
+exports[`heading with "**" 4`] = `
+[
+  "{"operate":"blockOpen","type":"headingType","chunk":"#"}",
+  "{"operate":"append","type":"strongOpen","chunk":"**"}",
+  "{"operate":"append","type":"inlineCodeOpen","chunk":"\`"}",
+  "{"operate":"append","type":"inlineCode","chunk":"bar"}",
+  "{"operate":"append","type":"inlineCodeClose","chunk":"\`"}",
+  "{"operate":"append","type":"strong","chunk":" "}",
+  "{"operate":"append","type":"strong","chunk":"for"}",
+  "{"operate":"append","type":"strongClose","chunk":"**"}",
+]
+`;
+
+exports[`heading with "**" 5`] = `
+[
+  "{"operate":"blockOpen","type":"headingType","chunk":"#"}",
+  "{"operate":"append","type":"strongOpen","chunk":"**"}",
+  "{"operate":"append","type":"inlineCodeOpen","chunk":"\`"}",
+  "{"operate":"append","type":"inlineCode","chunk":"bar"}",
+  "{"operate":"append","type":"inlineCodeClose","chunk":"\`"}",
+  "{"operate":"append","type":"strong","chunk":" "}",
+  "{"operate":"append","type":"strong","chunk":"for"}",
+  "{"operate":"append","type":"strongClose","chunk":"**"}",
+  "{"operate":"append","type":"headingContent","chunk":"zzz"}",
+]
+`;
+
+exports[`heading with inline code 1`] = `
+[
+  "{"operate":"blockOpen","type":"headingType","chunk":"#"}",
+  "{"operate":"append","type":"inlineCodeOpen","chunk":"\`"}",
+  "{"operate":"append","type":"inlineCode","chunk":"bar"}",
+  "{"operate":"append","type":"inlineCodeClose","chunk":"\`"}",
+]
+`;
+
+exports[`heading with inline code 2`] = `
+[
+  "{"operate":"blockOpen","type":"headingType","chunk":"#"}",
+  "{"operate":"append","type":"headingContent","chunk":"foo "}",
+  "{"operate":"append","type":"inlineCodeOpen","chunk":"\`"}",
+  "{"operate":"append","type":"inlineCode","chunk":"bar"}",
+  "{"operate":"append","type":"inlineCodeClose","chunk":"\`"}",
+]
+`;
+
+exports[`heading with inline code 3`] = `
+[
+  "{"operate":"blockOpen","type":"headingType","chunk":"#"}",
+  "{"operate":"append","type":"inlineCodeOpen","chunk":"\`"}",
+  "{"operate":"append","type":"inlineCode","chunk":"bar"}",
+  "{"operate":"append","type":"inlineCodeClose","chunk":"\`"}",
+  "{"operate":"append","type":"headingContent","chunk":" fo"}",
+  "{"operate":"append","type":"headingContent","chunk":"r"}",
+]
+`;
+
+exports[`heading with inline code 4`] = `
+[
+  "{"operate":"blockOpen","type":"headingType","chunk":"#"}",
+  "{"operate":"append","type":"inlineCodeOpen","chunk":"\`"}",
+  "{"operate":"append","type":"inlineCode","chunk":"bar"}",
+  "{"operate":"append","type":"inlineCodeClose","chunk":"\`"}",
+]
+`;
+
+exports[`heading with inline code 5`] = `
+[
+  "{"operate":"blockOpen","type":"headingType","chunk":"#"}",
+  "{"operate":"append","type":"headingContent","chunk":"foo "}",
+  "{"operate":"append","type":"inlineCodeOpen","chunk":"\`"}",
+  "{"operate":"append","type":"inlineCode","chunk":"bar"}",
+  "{"operate":"append","type":"inlineCodeClose","chunk":"\`"}",
+]
+`;
+
+exports[`heading with inline code 6`] = `
+[
+  "{"operate":"blockOpen","type":"headingType","chunk":"#"}",
+  "{"operate":"append","type":"inlineCodeOpen","chunk":"\`"}",
+  "{"operate":"append","type":"inlineCode","chunk":"bar"}",
+  "{"operate":"append","type":"inlineCodeClose","chunk":"\`"}",
+  "{"operate":"append","type":"headingContent","chunk":" fo"}",
+  "{"operate":"append","type":"headingContent","chunk":"r"}",
+]
+`;

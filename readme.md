@@ -6,6 +6,8 @@ Tranform a stream of Markdown into HTML
 
 ## Usage
 
+### createMarkdownStreamRender
+
 ```ts
 import { createMarkdownStreamRender } from "markdown-streamx";
 
@@ -24,4 +26,37 @@ async function procressFoo() {
   document.body.appendChild(container);
   await createMarkdownStreamRender(markdownStream, container);
 }
+```
+
+### processMarkdownStreamChunk
+
+```ts
+const markdownStream = createStream(md);
+
+processMarkdownStreamChunk(stream, (ast) => {
+  console.log(ast);
+});
+```
+
+> [!IMPORTANT]
+> the `ast` in processMarkdownStreamChunk above
+
+```snap
+  "{"operate":"blockOpen","type":"italicOpen","chunk":"*"}",
+  "{"operate":"append","type":"italic","chunk":"foo"}",
+  "{"operate":"append","type":"inlineCodeOpen","chunk":"\`"}",
+  "{"operate":"append","type":"inlineCode","chunk":"bar"}",
+  "{"operate":"append","type":"inlineCodeClose","chunk":"\`"}",
+  "{"operate":"append","type":"italic","chunk":"zzzzzzzz"}",
+  "{"operate":"append","type":"italicClose","chunk":"*"}",
+  "{"operate":"append","type":"text","chunk":"g"}",
+  "{"operate":"append","type":"text","chunk":"gg"}",
+  "{"operate":"blockOpen","type":"italicOpen","chunk":"*"}",
+  "{"operate":"append","type":"italic","chunk":"xxxx"}",
+  "{"operate":"append","type":"italicClose","chunk":"*"}",
+  "{"operate":"blockOpen","type":"italicOpen","chunk":"*"}",
+  "{"operate":"append","type":"inlineCodeOpen","chunk":"\`"}",
+  "{"operate":"append","type":"inlineCode","chunk":"linzhe"}",
+  "{"operate":"append","type":"inlineCodeClose","chunk":"\`"}",
+  "{"operate":"append","type":"italicClose","chunk":"*"}",
 ```

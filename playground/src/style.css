@@ -1,2 +1,7 @@
 @import "tailwindcss";
 @plugin "@tailwindcss/typography";
+.dark .prose {
+  --tw-prose-headings: white !important;
+  --tw-prose-code: white !important;
+  color: white;
+}

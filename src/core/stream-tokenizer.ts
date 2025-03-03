@@ -3,16 +3,27 @@ export type State =
   | "newLine"
   | "maybeCodeBlockOpen"
   | "maybeCodeBlockClose"
+  | "codeBlockOpen"
   | "codeBlockMeta"
   | "codeBlock"
+  | "codeBlockClose"
   | "headingType"
   | "headingContent"
   | "inlineCodeOpen"
   | "inlineCode"
-  | "inlineCodeClose";
+  | "inlineCodeClose"
+  | "italicOpen"
+  | "italic"
+  | "italicClose"
+  | "maybeStrongOpen"
+  | "maybeStrongClose"
+  | "strongOpen"
+  | "strong"
+  | "strongClose";
 export type ChunkData = {
   operate: "blockOpen" | "append";
   type:
+    | "newLine"
     | "text"
     | "codeBlockOpen"
     | "codeBlockMeta"
@@ -22,16 +33,22 @@ export type ChunkData = {
     | "headingContent"
     | "inlineCodeOpen"
     | "inlineCode"
-    | "inlineCodeClose";
+    | "inlineCodeClose"
+    | "italicOpen"
+    | "italic"
+    | "italicClose"
+    | "strongOpen"
+    | "strong"
+    | "strongClose";
   chunk: string;
 };
-
 export class StreamTokenizer {
-  state: State = "text";
+  state: State = "newLine";
+  chunkTypeStack: ChunkData["type"][] = [];
   completeChunks: string[] = [];
   completeChunkItem: string[] = [];
-  chunksDebugInfo: any[] = [];
   codeBlockIndex = 0;
+  strongIndex = 0;
   headingIndex = 0;
   controller: TransformStreamDefaultController = null!;
 
@@ -67,6 +84,10 @@ export class StreamTokenizer {
     while (index < chunk.length) {
       const c = chunk[index];
       switch (this.state) {
+        case "newLine": {
+          this.stateNewLine(c, index, chunk);
+          break;
+        }
         case "text": {
           this.stateText(c, index, chunk);
           break;
@@ -83,10 +104,36 @@ export class StreamTokenizer {
           this.stateInlineCodeClose(c, index, chunk);
           break;
         }
-        case "newLine": {
-          this.stateNewLine(c, index, chunk);
+        case "italicOpen": {
+          this.stateItalicOpen(c, index, chunk);
           break;
         }
+        case "italic": {
+          this.stateItalic(c, index, chunk);
+          break;
+        }
+        case "italicClose": {
+          this.stateItalicClose(c, index, chunk);
+          break;
+        }
+
+        case "maybeStrongOpen": {
+          this.stateMaybeStrongOpen(c, index, chunk);
+          break;
+        }
+        case "maybeStrongClose": {
+          this.stateMaybeStrongClose(c, index, chunk);
+          break;
+        }
+        case "strongOpen": {
+          this.stateStrongOpen(c, index, chunk);
+          break;
+        }
+        case "strong": {
+          this.stateStrong(c, index, chunk);
+          break;
+        }
+
         case "maybeCodeBlockOpen": {
           this.stateMaybeCodeBlockOpen(c, index, chunk);
           break;
@@ -116,11 +163,28 @@ export class StreamTokenizer {
     }
   }
 
+  stateNewLine(c: string, index: number, chunk: string) {
+    this.chunkTypeStack = [];
+    // if (c === "\n") return;
+    if (c === "`") {
+      this.state = "maybeCodeBlockOpen";
+      this.codeBlockIndex = 0;
+      this.stateMaybeCodeBlockOpen(c, index, chunk);
+    } else if (c === "#") {
+      this.state = "headingType";
+      this.headingIndex = 0;
+      this.stateHeadingType(c, index, chunk);
+    } else {
+      this.state = "text";
+      this.chunkTypeStack.push("text");
+      this.stateText(c, index, chunk);
+    }
+  }
+
   stateText(c: string, index: number, chunk: string) {
     if (c === "\n") {
       this.state = "newLine";
       this.processPossiblePreviousChunk("text");
-      // this.chunksDebugInfo.push(this.completeChunks)
       this.completeChunkItem = [];
       this.completeChunks = [];
     } else if (c === "`") {
@@ -129,6 +193,13 @@ export class StreamTokenizer {
 
       this.state = "inlineCodeOpen";
       this.stateInlineCodeOpen(c, index, chunk);
+    } else if (c === "*") {
+      this.processPossiblePreviousChunk("text");
+      this.completeChunkItem = [];
+
+      this.state = "maybeStrongOpen";
+      this.strongIndex = 0;
+      this.stateMaybeStrongOpen(c, index, chunk);
     } else {
       // 其他字符
       this.completeChunkItem.push(c);
@@ -144,6 +215,7 @@ export class StreamTokenizer {
       this.enqueue(c, "inlineCodeOpen");
       this.completeChunkItem = [];
       this.state = "inlineCode";
+      this.chunkTypeStack.push("inlineCode");
     }
   }
   stateInlineCode(c: string, index: number, chunk: string) {
@@ -166,24 +238,135 @@ export class StreamTokenizer {
       this.enqueue(c, "inlineCodeClose");
       this.completeChunkItem.push(c);
       this.completeChunkItem = [];
-      this.state = "text";
+
+      this.chunkTypeStack.pop();
+      const prevChunkType =
+        this.chunkTypeStack[this.chunkTypeStack.length - 1]!;
+      this.state = prevChunkType as any;
     }
   }
-  stateNewLine(c: string, index: number, chunk: string) {
-    // if (c === "\n") return
-    if (c === "`") {
-      this.state = "maybeCodeBlockOpen";
-      this.codeBlockIndex = 0;
-      this.stateMaybeCodeBlockOpen(c, index, chunk);
-    } else if (c === "#") {
-      this.state = "headingType";
-      this.headingIndex = 0;
-      this.stateHeadingType(c, index, chunk);
+
+  stateItalicOpen(c: string, _index: number, _chunk: string) {
+    if (c === "*") {
+      this.chunkTypeStack.push("italic");
+      this.state = "italic";
+
+      this.completeChunkItem.push(c);
+      this.enqueue(c, "italicOpen");
+
+      this.completeChunkItem = [];
+    }
+  }
+  stateItalic(c: string, index: number, chunk: string) {
+    if (c === "*") {
+      this.processPossiblePreviousChunk("italic");
+      this.completeChunkItem = [];
+
+      this.state = "italicClose";
+      this.stateItalicClose(c, index, chunk);
+    } else if (c === "`") {
+      this.processPossiblePreviousChunk("italic");
+      this.completeChunkItem = [];
+
+      this.state = "inlineCodeOpen";
+      this.stateInlineCodeOpen(c, index, chunk);
     } else {
-      this.state = "text";
-      this.stateText(c, index, chunk);
+      // 其他字符
+      this.completeChunkItem.push(c);
+      if (index === chunk.length - 1) {
+        this.enqueueCompleteChunk("italic");
+      }
     }
   }
+  stateItalicClose(c: string, _index: number, _chunk: string) {
+    if (c === "*") {
+      this.enqueue(c, "italicClose");
+      this.completeChunkItem.push(c);
+      this.completeChunkItem = [];
+
+      this.chunkTypeStack.pop();
+      const prevChunkType =
+        this.chunkTypeStack[this.chunkTypeStack.length - 1]!;
+      this.state = prevChunkType as any;
+    }
+  }
+
+  stateMaybeStrongOpen(c: string, index: number, chunk: string) {
+    if (c === "*") {
+      this.completeChunkItem.push(c);
+      if (this.strongIndex === 1) {
+        this.processPossiblePreviousChunk("strongOpen");
+
+        this.chunkTypeStack.push("strong");
+        this.state = "strong";
+
+        this.completeChunkItem = [];
+      } else {
+        this.strongIndex++;
+      }
+    } else {
+      this.processPossiblePreviousChunk("italicOpen");
+
+      this.chunkTypeStack.push("italic");
+      this.state = "italic";
+
+      this.completeChunkItem = [];
+      this.stateItalic(c, index, chunk);
+    }
+  }
+  stateMaybeStrongClose(c: string, index: number, chunk: string) {
+    if (c === "*") {
+      this.completeChunkItem.push(c);
+      if (this.strongIndex === 0) {
+        this.state = "strongClose";
+        this.stateStrongClose();
+      } else {
+        this.strongIndex--;
+      }
+    } else {
+      this.state = "strong";
+      this.stateStrong(c, index, chunk);
+    }
+  }
+
+  stateStrongOpen(c: string, _index: number, _chunk: string) {
+    if (c === "*") {
+      this.chunkTypeStack.push("strong");
+      this.state = "strong";
+
+      this.completeChunkItem = [];
+    }
+  }
+  stateStrong(c: string, index: number, chunk: string) {
+    if (c === "*") {
+      this.processPossiblePreviousChunk("strong");
+      this.completeChunkItem = [];
+
+      this.state = "maybeStrongClose";
+      this.stateMaybeStrongClose(c, index, chunk);
+    } else if (c === "`") {
+      this.processPossiblePreviousChunk("strong");
+      this.completeChunkItem = [];
+
+      this.state = "inlineCodeOpen";
+      this.stateInlineCodeOpen(c, index, chunk);
+    } else {
+      // 其他字符
+      this.completeChunkItem.push(c);
+      if (index === chunk.length - 1) {
+        this.enqueueCompleteChunk("strong");
+      }
+    }
+  }
+  stateStrongClose() {
+    this.processPossiblePreviousChunk("strongClose");
+    this.completeChunkItem = [];
+
+    this.chunkTypeStack.pop();
+    const prevChunkType = this.chunkTypeStack[this.chunkTypeStack.length - 1]!;
+    this.state = prevChunkType as any;
+  }
+
   stateMaybeCodeBlockOpen(c: string, index: number, chunk: string) {
     if (c === "`") {
       this.completeChunkItem.push(c);
@@ -207,9 +390,7 @@ export class StreamTokenizer {
     if (c === "\n") {
       this.processPossiblePreviousChunk("codeBlockMeta");
 
-      // this.chunksDebugInfo.push(this.completeChunks)
       this.completeChunkItem = [];
-      // this.completeChunks = []
       this.state = "codeBlock";
     } else {
       this.completeChunkItem.push(c);
@@ -217,8 +398,10 @@ export class StreamTokenizer {
   }
   stateCodeBlock(c: string, index: number, chunk: string) {
     if (c === "`") {
+      this.processPossiblePreviousChunk("codeBlock");
+      this.completeChunkItem = [];
+
       this.state = "maybeCodeBlockClose";
-      this.codeBlockIndex = 0;
       this.stateMaybeCodeBlockClose(c, index, chunk);
     } else {
       this.completeChunkItem.push(c);
@@ -230,29 +413,24 @@ export class StreamTokenizer {
   stateMaybeCodeBlockClose(c: string, index: number, chunk: string) {
     if (c === "`") {
       this.completeChunkItem.push(c);
-      if (this.codeBlockIndex === 2) {
-        this.completeChunkItem = this.completeChunkItem.splice(
-          0,
-          this.completeChunkItem.length - 3
-        );
-        const content = this.completeChunkItem.join("");
-        this.enqueue(content, "codeBlock");
-        this.completeChunks.push(content);
-        this.completeChunkItem = [];
-        this.completeChunks = [];
-
-        this.enqueue("```", "codeBlockClose");
-        this.completeChunkItem = [];
-        this.completeChunks = [];
-        this.state = "text";
+      if (this.codeBlockIndex === 0) {
+        this.state = "codeBlockClose";
+        this.stateCodeBlockClose();
       } else {
-        this.codeBlockIndex++;
+        this.codeBlockIndex--;
       }
     } else {
       this.state = "codeBlock";
       this.stateCodeBlock(c, index, chunk);
     }
   }
+  stateCodeBlockClose() {
+    this.processPossiblePreviousChunk("codeBlockClose");
+    this.completeChunkItem = [];
+    // TODO
+    this.state = "newLine";
+  }
+
   stateHeadingType(c: string, _index: number, _chunk: string) {
     if (c === "#") {
       this.completeChunkItem.push(c);
@@ -262,6 +440,7 @@ export class StreamTokenizer {
       this.completeChunkItem = [];
 
       this.state = "headingContent";
+      this.chunkTypeStack.push("headingContent");
     }
   }
   stateHeadingContent(c: string, index: number, chunk: string) {
@@ -271,6 +450,19 @@ export class StreamTokenizer {
 
       this.completeChunkItem = [];
       this.completeChunks = [];
+    } else if (c === "*") {
+      this.processPossiblePreviousChunk("headingContent");
+      this.completeChunkItem = [];
+
+      this.state = "maybeStrongOpen";
+      this.strongIndex = 0;
+      this.stateMaybeStrongOpen(c, index, chunk);
+    } else if (c === "`") {
+      this.processPossiblePreviousChunk("headingContent");
+      this.completeChunkItem = [];
+
+      this.state = "inlineCodeOpen";
+      this.stateInlineCodeOpen(c, index, chunk);
     } else {
       this.completeChunkItem.push(c);
       if (index === chunk.length - 1) {
