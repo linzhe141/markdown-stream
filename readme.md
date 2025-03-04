@@ -1,5 +1,8 @@
 # markdown-streamx
 
+> [!IMPORTANT] A toy
+> `markdown-streamx` does not check whether the input is a complete and correct
+
 Tranform a stream of Markdown into HTML
 
 [Live Demo](https://linzhe141.github.io/markdown-stream/)
