@@ -8,7 +8,7 @@ import {
 } from "../../src";
 const container = ref<Element | null>(null);
 const disabled = ref(false);
-function createStream(text: string, chunkSize = 6, delay = 150) {
+function createStream(text: string, chunkSize = 6, delay = 0) {
   let position = 0;
 
   return new ReadableStream({

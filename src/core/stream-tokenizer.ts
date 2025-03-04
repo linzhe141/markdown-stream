@@ -1,5 +1,6 @@
 export type State =
   | "text"
+  | "maybeNewLine"
   | "newLine"
   | "maybeCodeBlockOpen"
   | "maybeCodeBlockClose"
@@ -48,6 +49,7 @@ export class StreamTokenizer {
   completeChunks: string[] = [];
   completeChunkItem: string[] = [];
   codeBlockIndex = 0;
+  newLineIndex = 0;
   strongIndex = 0;
   headingIndex = 0;
   controller: TransformStreamDefaultController = null!;
@@ -84,6 +86,10 @@ export class StreamTokenizer {
     while (index < chunk.length) {
       const c = chunk[index];
       switch (this.state) {
+        case "maybeNewLine": {
+          this.stateMaybeNewline(c, index, chunk);
+          break;
+        }
         case "newLine": {
           this.stateNewLine(c, index, chunk);
           break;
@@ -163,9 +169,46 @@ export class StreamTokenizer {
     }
   }
 
+  stateMaybeNewline(c: string, index: number, chunk: string) {
+    if (c === "\n") {
+      this.completeChunkItem.push(c);
+      if (this.newLineIndex === 1) {
+        this.chunkTypeStack.push("newLine");
+        this.state = "newLine";
+      } else {
+        this.newLineIndex++;
+      }
+    } else if (c === "`") {
+      this.completeChunkItem = [];
+      this.state = "maybeCodeBlockOpen";
+      this.codeBlockIndex = 0;
+
+      this.stateMaybeCodeBlockOpen(c, index, chunk);
+    } else if (c === "#") {
+      this.completeChunks = [];
+      this.chunkTypeStack = [];
+      this.completeChunkItem = [];
+
+      this.state = "headingType";
+      this.headingIndex = 0;
+      this.stateHeadingType(c);
+    } else {
+      // 不需要这个 \n
+      this.completeChunkItem = [];
+
+      const prevChunkType =
+        this.chunkTypeStack[this.chunkTypeStack.length - 1]!;
+      this.state = prevChunkType;
+      if (prevChunkType === "text") {
+        this.stateText(c, index, chunk);
+      }
+    }
+  }
+
   stateNewLine(c: string, index: number, chunk: string) {
     this.chunkTypeStack = [];
-    // if (c === "\n") return;
+    this.completeChunks = [];
+    this.completeChunkItem = [];
     if (c === "`") {
       this.state = "maybeCodeBlockOpen";
       this.codeBlockIndex = 0;
@@ -183,10 +226,11 @@ export class StreamTokenizer {
 
   stateText(c: string, index: number, chunk: string) {
     if (c === "\n") {
-      this.state = "newLine";
+      this.state = "maybeNewLine";
       this.processPossiblePreviousChunk("text");
       this.completeChunkItem = [];
-      this.completeChunks = [];
+      this.newLineIndex = 0;
+      this.stateMaybeNewline(c, index, chunk);
     } else if (c === "`") {
       this.processPossiblePreviousChunk("text");
       this.completeChunkItem = [];
@@ -371,7 +415,10 @@ export class StreamTokenizer {
     if (c === "`") {
       this.completeChunkItem.push(c);
       if (this.codeBlockIndex === 2) {
+        this.completeChunks = [];
         this.processPossiblePreviousChunk("codeBlockOpen");
+        debugger;
+        this.chunkTypeStack = [];
         this.completeChunkItem = [];
 
         this.state = "codeBlockMeta";
