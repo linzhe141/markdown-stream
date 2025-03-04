@@ -17,3 +17,12 @@ test(`strong with inline code`, async () => {
   const ast = await getMarkdownStreamAst(createStream(md));
   expect(ast.map((i) => JSON.stringify(i))).toMatchSnapshot();
 });
+
+
+test(`strong with one newline`, async () => {
+  const md = `*foo\`bar\`zzzzzzzz*ggg
+*xxxx* 
+*\`linzhe\`*`;
+  const ast = await getMarkdownStreamAst(createStream(md));
+  expect(ast.map((i) => JSON.stringify(i))).toMatchSnapshot();
+});

@@ -28,3 +28,27 @@ exports[`strong with inline code 1`] = `
   "{"operate":"append","type":"text","chunk":"bbb"}",
 ]
 `;
+
+exports[`strong with one newline 1`] = `
+[
+  "{"operate":"blockOpen","type":"italicOpen","chunk":"*"}",
+  "{"operate":"append","type":"italic","chunk":"foo"}",
+  "{"operate":"append","type":"inlineCodeOpen","chunk":"\`"}",
+  "{"operate":"append","type":"inlineCode","chunk":"bar"}",
+  "{"operate":"append","type":"inlineCodeClose","chunk":"\`"}",
+  "{"operate":"append","type":"italic","chunk":"z"}",
+  "{"operate":"append","type":"italic","chunk":"zzzzzzz"}",
+  "{"operate":"append","type":"italicClose","chunk":"*"}",
+  "{"operate":"append","type":"text","chunk":"gg"}",
+  "{"operate":"append","type":"text","chunk":"g"}",
+  "{"operate":"append","type":"italicOpen","chunk":"*"}",
+  "{"operate":"append","type":"italic","chunk":"xxxx"}",
+  "{"operate":"append","type":"italicClose","chunk":"*"}",
+  "{"operate":"append","type":"text","chunk":" "}",
+  "{"operate":"append","type":"italicOpen","chunk":"*"}",
+  "{"operate":"append","type":"inlineCodeOpen","chunk":"\`"}",
+  "{"operate":"append","type":"inlineCode","chunk":"linzhe"}",
+  "{"operate":"append","type":"inlineCodeClose","chunk":"\`"}",
+  "{"operate":"append","type":"italicClose","chunk":"*"}",
+]
+`;

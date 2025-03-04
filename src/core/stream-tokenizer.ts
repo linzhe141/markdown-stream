@@ -209,7 +209,9 @@ export class StreamTokenizer {
     this.chunkTypeStack = [];
     this.completeChunks = [];
     this.completeChunkItem = [];
+    if (c === "\n") return;
     if (c === "`") {
+      this.chunkTypeStack.push("text");
       this.state = "maybeCodeBlockOpen";
       this.codeBlockIndex = 0;
       this.stateMaybeCodeBlockOpen(c, index, chunk);
@@ -217,6 +219,11 @@ export class StreamTokenizer {
       this.state = "headingType";
       this.headingIndex = 0;
       this.stateHeadingType(c);
+    } else if (c === "*") {
+      this.chunkTypeStack.push("text");
+      this.state = "maybeStrongOpen";
+      this.strongIndex = 0;
+      this.stateMaybeStrongOpen(c, index, chunk);
     } else {
       this.state = "text";
       this.chunkTypeStack.push("text");
@@ -417,7 +424,6 @@ export class StreamTokenizer {
       if (this.codeBlockIndex === 2) {
         this.completeChunks = [];
         this.processPossiblePreviousChunk("codeBlockOpen");
-        debugger;
         this.chunkTypeStack = [];
         this.completeChunkItem = [];
 

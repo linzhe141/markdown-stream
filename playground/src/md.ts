@@ -59,3 +59,16 @@ li {
 \`\`\`
 
 你可以根据需要修改 \`items\` 数组的内容，列表会自动更新。希望这个示例对你有帮助！如果有其他问题，随时问我哦！`;
+export const md1 = `
+*foo\`bar\`zzzzzzzz*ggg
+
+*xxxx*
+
+*\`linzhe\`*
+
+**fffff**
+
+*sss*
+
+\`zzz\`
+`;
