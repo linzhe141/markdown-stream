@@ -1,0 +1,19 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`inlineCode with one newline 1`] = `
+[
+  "{"operate":"blockOpen","type":"inlineCodeOpen","chunk":"\`"}",
+  "{"operate":"append","type":"inlineCode","chunk":"zzz"}",
+  "{"operate":"append","type":"inlineCodeClose","chunk":"\`"}",
+  "{"operate":"append","type":"text","chunk":"foo"}",
+]
+`;
+
+exports[`inlineCode with tow newline 1`] = `
+[
+  "{"operate":"blockOpen","type":"inlineCodeOpen","chunk":"\`"}",
+  "{"operate":"append","type":"inlineCode","chunk":"zzz"}",
+  "{"operate":"append","type":"inlineCodeClose","chunk":"\`"}",
+  "{"operate":"blockOpen","type":"text","chunk":"foo"}",
+]
+`;

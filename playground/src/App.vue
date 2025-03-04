@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { onMounted, ref } from "vue";
-import { md } from "./md";
+import { md, md1 } from "./md";
 import {
   createMarkdownStreamRender,
   getMarkdownStreamAst,

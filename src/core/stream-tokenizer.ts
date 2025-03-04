@@ -435,6 +435,7 @@ export class StreamTokenizer {
       this.processPossiblePreviousChunk("inlineCodeOpen");
       this.completeChunkItem = [];
       this.state = "inlineCode";
+      this.chunkTypeStack.push("inlineCode");
       this.stateInlineCode(c, index, chunk);
     }
   }
