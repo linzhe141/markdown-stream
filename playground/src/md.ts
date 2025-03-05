@@ -1,15 +1,45 @@
 export const md = `好的！下面 Vue 3 的简单 \`v-for\` 示例。这个示例会遍历一个数组，并将数组中的每一项渲染为一个列表项。
 
-\`zzz\`
-
-**bbb**
-
-*aaa*
-
 # 代码示例 *vue3 todo list*
 
 \`\`\`html  filename="app.vue"
-<div>aaaaaaa</div>
+<template>
+  <div>
+    <h1>Vue 3 v-for 示例</h1>
+    <ul>
+      <li v-for="(item, index) in items" :key="index">
+        {{ index + 1 }}. {{ item }}
+      </li>
+    </ul>
+  </div>
+</template>
+
+<script>
+import { ref } from 'vue';
+
+export default {
+  setup() {
+    // 定义一个包含字符串的数组
+    const items = ref(['苹果', '香蕉', '橙子', '葡萄', '芒果']);
+
+    return {
+      items,
+    };
+  },
+};
+</script>
+
+<style>
+/* 简单的样式 */
+ul {
+  list-style-type: none;
+  padding: 0;
+}
+li {
+  margin: 10px 0;
+  font-size: 18px;
+}
+</style>
 \`\`\`
 
 ### 代码说明
