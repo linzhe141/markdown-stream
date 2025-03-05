@@ -8,7 +8,7 @@ import {
 } from "../../src";
 const container = ref<Element | null>(null);
 const disabled = ref(false);
-function createStream(text: string, chunkSize = 6, delay = 0) {
+function createStream(text: string, chunkSize = 6, delay = 50) {
   let position = 0;
 
   return new ReadableStream({
@@ -40,9 +40,7 @@ async function clickHandle() {
   containerDom.innerHTML = "";
   await createMarkdownStreamRender(stream, containerDom);
   // console.log(await getMarkdownStreamAst(stream));
-  // processMarkdownStreamChunk(stream, (ast) => {
-  //   console.log(ast);
-  // });
+  // processMarkdownStreamChunk(stream, console.log);
   disabled.value = false;
 }
 onMounted(clickHandle);

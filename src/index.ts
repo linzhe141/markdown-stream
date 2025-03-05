@@ -21,6 +21,8 @@ export async function createMarkdownStreamRender(
     createInlineCode,
     createItalic,
     createStrong,
+    createList,
+    createListItem,
   } = renderer;
   while (true) {
     const { done, value } = await reader.read();
@@ -70,6 +72,12 @@ export async function createMarkdownStreamRender(
         }
         case "codeBlockOpen": {
           const dom = createCodeBlock();
+          stack.push(dom);
+          container.appendChild(dom);
+          break;
+        }
+        case "listOpen": {
+          const dom = createList();
           stack.push(dom);
           container.appendChild(dom);
           break;
@@ -148,6 +156,30 @@ export async function createMarkdownStreamRender(
             stack.pop();
             break;
           }
+
+          case "listItemOpen": {
+            const listItem = createListItem();
+            last.appendChild(listItem);
+            stack.push(listItem);
+            break;
+          }
+          case "listItemContent": {
+            const listItem = stack[stack.length - 1];
+            if (listItem) {
+              const textNode = document.createTextNode(value.chunk);
+              listItem.appendChild(textNode);
+            }
+            break;
+          }
+          case "listItemClose": {
+            stack.pop();
+            break;
+          }
+          case "listClose": {
+            stack.pop();
+            break;
+          }
+
           default: {
             const textNode = document.createTextNode(value.chunk);
             last.appendChild(textNode);

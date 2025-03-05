@@ -1,6 +1,8 @@
 # markdown-streamx
 
-> [!IMPORTANT] A toy
+> [!IMPORTANT]
+> Just a toy
+>
 > `markdown-streamx` does not check whether the input is a complete and correct
 
 Tranform a stream of Markdown into HTML
@@ -44,7 +46,7 @@ processMarkdownStreamChunk(stream, (ast) => {
 > [!IMPORTANT]
 > the `ast` in processMarkdownStreamChunk above
 
-```snap
+```json
   "{"operate":"blockOpen","type":"italicOpen","chunk":"*"}",
   "{"operate":"append","type":"italic","chunk":"foo"}",
   "{"operate":"append","type":"inlineCodeOpen","chunk":"\`"}",

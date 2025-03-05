@@ -20,7 +20,14 @@ export type State =
   | "maybeStrongClose"
   | "strongOpen"
   | "strong"
-  | "strongClose";
+  | "strongClose"
+  | "listOpen"
+  | "listItemOpen"
+  | "listItemContent"
+  | "listItemClose"
+  | "listClose"
+  | "maybeListClose";
+
 export type ChunkData = {
   operate: "blockOpen" | "append";
   type:
@@ -40,7 +47,12 @@ export type ChunkData = {
     | "italicClose"
     | "strongOpen"
     | "strong"
-    | "strongClose";
+    | "strongClose"
+    | "listOpen"
+    | "listItemOpen"
+    | "listItemClose"
+    | "listItemContent"
+    | "listClose";
   chunk: string;
 };
 export class StreamTokenizer {
@@ -94,6 +106,19 @@ export class StreamTokenizer {
           this.stateNewLine(c, index, chunk);
           break;
         }
+        case "listItemOpen": {
+          this.stateListItem(c, index, chunk);
+          break;
+        }
+        case "listItemContent": {
+          this.stateListItemContent(c, index, chunk);
+          break;
+        }
+        case "maybeListClose": {
+          this.stateMaybeListClose(c, index, chunk);
+          break;
+        }
+
         case "text": {
           this.stateText(c, index, chunk);
           break;
@@ -184,6 +209,13 @@ export class StreamTokenizer {
       this.codeBlockIndex = 0;
 
       this.stateMaybeCodeBlockOpen(c, index, chunk);
+    } else if (c === "-") {
+      this.completeChunks = [];
+      this.chunkTypeStack = [];
+      this.completeChunkItem = [];
+
+      this.state = "listItemOpen";
+      this.stateListItem(c, index, chunk);
     } else if (c === "#") {
       this.completeChunks = [];
       this.chunkTypeStack = [];
@@ -204,6 +236,64 @@ export class StreamTokenizer {
       }
     }
   }
+  stateListItem(c: string, index: number, chunk: string) {
+    if (c === "-") {
+      this.completeChunkItem.push(c);
+    } else if (c === " ") {
+      this.processPossiblePreviousChunk("listItemOpen");
+      this.completeChunkItem = [];
+
+      this.state = "listItemContent";
+      this.chunkTypeStack.push("listItemContent");
+    }
+  }
+  stateListItemContent(c: string, index: number, chunk: string) {
+    if (c === "\n") {
+      this.processPossiblePreviousChunk("text");
+
+      this.enqueue("listItemClose", "listItemClose");
+      this.completeChunks.push("listItemClose");
+
+      this.state = "maybeListClose";
+      this.completeChunkItem = [];
+    } else if (c === "`") {
+      this.processPossiblePreviousChunk("text");
+      this.completeChunkItem = [];
+
+      this.state = "inlineCodeOpen";
+      this.stateInlineCodeOpen(c);
+    } else if (c === "*") {
+      this.processPossiblePreviousChunk("text");
+      this.completeChunkItem = [];
+
+      this.state = "maybeStrongOpen";
+      this.strongIndex = 0;
+      this.stateMaybeStrongOpen(c, index, chunk);
+    } else {
+      // 其他字符
+      this.completeChunkItem.push(c);
+      if (index === chunk.length - 1) {
+        this.enqueueCompleteChunk("text");
+      }
+    }
+  }
+
+  stateMaybeListClose(c: string, index: number, chunk: string) {
+    if (c === "-") {
+      this.state = "listItemOpen";
+      this.stateListItem(c, index, chunk);
+    } else {
+      this.enqueue("listClose", "listClose");
+      this.completeChunks.push("listClose");
+
+      this.chunkTypeStack = [];
+      this.completeChunks = [];
+      this.completeChunkItem = [];
+
+      this.state = "text";
+      this.stateText(c, index, chunk);
+    }
+  }
 
   stateNewLine(c: string, index: number, chunk: string) {
     this.chunkTypeStack = [];
@@ -215,6 +305,11 @@ export class StreamTokenizer {
       this.state = "maybeCodeBlockOpen";
       this.codeBlockIndex = 0;
       this.stateMaybeCodeBlockOpen(c, index, chunk);
+    } else if (c === "-") {
+      this.enqueue("listOpen", "listOpen");
+      this.completeChunks.push("listOpen");
+      this.state = "listItemOpen";
+      this.stateListItem(c, index, chunk);
     } else if (c === "#") {
       this.state = "headingType";
       this.headingIndex = 0;

@@ -17,6 +17,12 @@ export const renderer = {
   createStrong: () => {
     return document.createElement("b") as Element;
   },
+  createList: () => {
+    return document.createElement("ul") as Element;
+  },
+  createListItem: () => {
+    return document.createElement("li") as Element;
+  },
   createCodeBlock: () => {
     injectCopyToClipboard();
     const s = document.createElement("div");
