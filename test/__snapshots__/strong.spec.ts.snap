@@ -2,10 +2,12 @@
 
 exports[`basic  strong 1`] = `
 [
-  "{"operate":"blockOpen","type":"strongOpen","chunk":"**"}",
+  "{"operate":"blockOpen","type":"paragraphOpen","chunk":"paragraphOpen"}",
+  "{"operate":"append","type":"strongOpen","chunk":"**"}",
   "{"operate":"append","type":"strong","chunk":"xxxx"}",
   "{"operate":"append","type":"strongClose","chunk":"**"}",
-  "{"operate":"blockOpen","type":"strongOpen","chunk":"**"}",
+  "{"operate":"blockOpen","type":"paragraphOpen","chunk":"paragraphOpen"}",
+  "{"operate":"append","type":"strongOpen","chunk":"**"}",
   "{"operate":"append","type":"inlineCodeOpen","chunk":"\`"}",
   "{"operate":"append","type":"inlineCode","chunk":"linzhe"}",
   "{"operate":"append","type":"inlineCodeClose","chunk":"\`"}",
@@ -15,7 +17,8 @@ exports[`basic  strong 1`] = `
 
 exports[`strong with inline code 1`] = `
 [
-  "{"operate":"blockOpen","type":"paragraph","chunk":"aaa"}",
+  "{"operate":"blockOpen","type":"paragraphOpen","chunk":"paragraphOpen"}",
+  "{"operate":"append","type":"text","chunk":"aaa"}",
   "{"operate":"append","type":"strongOpen","chunk":"**"}",
   "{"operate":"append","type":"inlineCodeOpen","chunk":"\`"}",
   "{"operate":"append","type":"inlineCode","chunk":"bar"}",
@@ -25,13 +28,14 @@ exports[`strong with inline code 1`] = `
   "{"operate":"append","type":"inlineCode","chunk":"zzz"}",
   "{"operate":"append","type":"inlineCodeClose","chunk":"\`"}",
   "{"operate":"append","type":"strongClose","chunk":"**"}",
-  "{"operate":"append","type":"paragraph","chunk":"bbb"}",
+  "{"operate":"append","type":"text","chunk":"bbb"}",
 ]
 `;
 
 exports[`strong with one newline 1`] = `
 [
-  "{"operate":"blockOpen","type":"italicOpen","chunk":"*"}",
+  "{"operate":"blockOpen","type":"paragraphOpen","chunk":"paragraphOpen"}",
+  "{"operate":"append","type":"italicOpen","chunk":"*"}",
   "{"operate":"append","type":"italic","chunk":"foo"}",
   "{"operate":"append","type":"inlineCodeOpen","chunk":"\`"}",
   "{"operate":"append","type":"inlineCode","chunk":"bar"}",
@@ -39,12 +43,12 @@ exports[`strong with one newline 1`] = `
   "{"operate":"append","type":"italic","chunk":"z"}",
   "{"operate":"append","type":"italic","chunk":"zzzzzzz"}",
   "{"operate":"append","type":"italicClose","chunk":"*"}",
-  "{"operate":"append","type":"paragraph","chunk":"gg"}",
-  "{"operate":"append","type":"paragraph","chunk":"g"}",
+  "{"operate":"append","type":"text","chunk":"gg"}",
+  "{"operate":"append","type":"text","chunk":"g"}",
   "{"operate":"append","type":"italicOpen","chunk":"*"}",
   "{"operate":"append","type":"italic","chunk":"xxxx"}",
   "{"operate":"append","type":"italicClose","chunk":"*"}",
-  "{"operate":"append","type":"paragraph","chunk":" "}",
+  "{"operate":"append","type":"text","chunk":" "}",
   "{"operate":"append","type":"italicOpen","chunk":"*"}",
   "{"operate":"append","type":"inlineCodeOpen","chunk":"\`"}",
   "{"operate":"append","type":"inlineCode","chunk":"linzhe"}",

@@ -173,33 +173,3 @@ exports[`heading with inline code 3`] = `
   "{"operate":"append","type":"headingContent","chunk":"r"}",
 ]
 `;
-
-exports[`heading with inline code 4`] = `
-[
-  "{"operate":"blockOpen","type":"headingType","chunk":"#"}",
-  "{"operate":"append","type":"inlineCodeOpen","chunk":"\`"}",
-  "{"operate":"append","type":"inlineCode","chunk":"bar"}",
-  "{"operate":"append","type":"inlineCodeClose","chunk":"\`"}",
-]
-`;
-
-exports[`heading with inline code 5`] = `
-[
-  "{"operate":"blockOpen","type":"headingType","chunk":"#"}",
-  "{"operate":"append","type":"headingContent","chunk":"foo "}",
-  "{"operate":"append","type":"inlineCodeOpen","chunk":"\`"}",
-  "{"operate":"append","type":"inlineCode","chunk":"bar"}",
-  "{"operate":"append","type":"inlineCodeClose","chunk":"\`"}",
-]
-`;
-
-exports[`heading with inline code 6`] = `
-[
-  "{"operate":"blockOpen","type":"headingType","chunk":"#"}",
-  "{"operate":"append","type":"inlineCodeOpen","chunk":"\`"}",
-  "{"operate":"append","type":"inlineCode","chunk":"bar"}",
-  "{"operate":"append","type":"inlineCodeClose","chunk":"\`"}",
-  "{"operate":"append","type":"headingContent","chunk":" fo"}",
-  "{"operate":"append","type":"headingContent","chunk":"r"}",
-]
-`;

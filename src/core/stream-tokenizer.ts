@@ -46,6 +46,22 @@ export class StreamTokenizer {
   headingIndex = 0;
   controller: TransformStreamDefaultController = null!;
 
+  // 当是一个 paragraph 的 newBlock, 向ast中加入一个paragraphOpen标识
+  processParagraphOpen() {
+    this.enqueue("paragraphOpen", "paragraphOpen");
+    this.completeChunks.push("paragraphOpen");
+    this.chunkTypeStack.push("paragraphOpen");
+    // paragraphOpen 时默认的chunkType是text
+    // `java`foo foo-> 就是text
+    this.chunkTypeStack.push("text");
+  }
+
+  resetChunkDataWhenAsNewBlock() {
+    this.completeChunks = [];
+    this.chunkTypeStack = [];
+    this.completeChunkItem = [];
+  }
+
   processPossiblePreviousChunk(type: ChunkData["type"]) {
     if (this.completeChunkItem.length) {
       const content = this.completeChunkItem.join("");
@@ -184,34 +200,37 @@ export class StreamTokenizer {
         this.newLineIndex++;
       }
     } else if (c === "`") {
+      // 不需要单独的\n, 没有实际意义
       this.completeChunkItem = [];
+
       this.state = "maybeCodeBlockOpen";
       this.codeBlockIndex = 0;
 
       this.stateMaybeCodeBlockOpen(c, index, chunk);
     } else if (c === "-") {
-      this.completeChunks = [];
-      this.chunkTypeStack = [];
-      this.completeChunkItem = [];
+      this.resetChunkDataWhenAsNewBlock();
 
       this.state = "listItemOpen";
       this.stateListItemOpen(c, index, chunk);
     } else if (c === "#") {
-      this.completeChunks = [];
-      this.chunkTypeStack = [];
-      this.completeChunkItem = [];
+      this.resetChunkDataWhenAsNewBlock();
 
       this.state = "headingType";
       this.headingIndex = 0;
       this.stateHeadingType(c);
     } else {
-      // 不需要这个 \n
+      // 不需要单独的\n, 没有实际意义
       this.completeChunkItem = [];
 
       const prevChunkType =
         this.chunkTypeStack[this.chunkTypeStack.length - 1]!;
       this.state = prevChunkType;
-      // TODO
+      // TODO 其他情况？
+      // TODO 目前只考虑了在 text state 下的 maybeNewBlock
+      /**
+       * foo
+       * bar
+       */
       if (prevChunkType === "text") {
         this.stateText(c, index, chunk);
       }
@@ -274,12 +293,7 @@ export class StreamTokenizer {
     this.completeChunks = [];
     this.completeChunkItem = [];
     if (c === "\n") return;
-    if (c === "`") {
-      this.chunkTypeStack.push("text");
-      this.state = "maybeCodeBlockOpen";
-      this.codeBlockIndex = 0;
-      this.stateMaybeCodeBlockOpen(c, index, chunk);
-    } else if (c === "-") {
+    if (c === "-") {
       this.enqueue("listOpen", "listOpen");
       this.completeChunks.push("listOpen");
 
@@ -289,24 +303,22 @@ export class StreamTokenizer {
       this.state = "headingType";
       this.headingIndex = 0;
       this.stateHeadingType(c);
-    } else if (c === "*") {
-      // 像ast中加入一个标识
-      this.enqueue("paragraphOpen", "paragraphOpen");
-      this.chunkTypeStack.push("paragraphOpen");
-      this.completeChunks.push("paragraphOpen");
+    } else if (c === "`") {
+      this.processParagraphOpen();
 
-      this.chunkTypeStack.push("text");
+      this.state = "maybeCodeBlockOpen";
+      this.codeBlockIndex = 0;
+      this.stateMaybeCodeBlockOpen(c, index, chunk);
+    } else if (c === "*") {
+      this.processParagraphOpen();
+
       this.state = "maybeStrongOpen";
       this.strongIndex = 0;
       this.stateMaybeStrongOpen(c, index, chunk);
     } else {
-      // 像ast中加入一个标识
-      this.enqueue("paragraphOpen", "paragraphOpen");
-      this.chunkTypeStack.push("paragraphOpen");
-      this.completeChunks.push("paragraphOpen");
+      this.processParagraphOpen();
 
       this.state = "text";
-      this.chunkTypeStack.push("text");
       this.stateText(c, index, chunk);
     }
   }
@@ -392,14 +404,11 @@ export class StreamTokenizer {
     }
   }
   stateItalicClose(c: string) {
-    if (c === "*") {
-      this.enqueue(c, "italicClose");
+    this.enqueue(c, "italicClose");
 
-      this.chunkTypeStack.pop();
-      const prevChunkType =
-        this.chunkTypeStack[this.chunkTypeStack.length - 1]!;
-      this.state = prevChunkType;
-    }
+    this.chunkTypeStack.pop();
+    const prevChunkType = this.chunkTypeStack[this.chunkTypeStack.length - 1]!;
+    this.state = prevChunkType;
   }
 
   stateMaybeStrongOpen(c: string, index: number, chunk: string) {
