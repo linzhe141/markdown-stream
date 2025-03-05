@@ -293,6 +293,7 @@ export class StreamTokenizer {
       // 像ast中加入一个标识
       this.enqueue("paragraphOpen", "paragraphOpen");
       this.chunkTypeStack.push("paragraphOpen");
+      this.completeChunks.push("paragraphOpen");
 
       this.chunkTypeStack.push("text");
       this.state = "maybeStrongOpen";
@@ -302,6 +303,7 @@ export class StreamTokenizer {
       // 像ast中加入一个标识
       this.enqueue("paragraphOpen", "paragraphOpen");
       this.chunkTypeStack.push("paragraphOpen");
+      this.completeChunks.push("paragraphOpen");
 
       this.state = "text";
       this.chunkTypeStack.push("text");
