@@ -9,8 +9,8 @@ exports[`basic  italic 1`] = `
   "{"operate":"append","type":"inlineCodeClose","chunk":"\`"}",
   "{"operate":"append","type":"italic","chunk":"zzzzzzzz"}",
   "{"operate":"append","type":"italicClose","chunk":"*"}",
-  "{"operate":"append","type":"text","chunk":"g"}",
-  "{"operate":"append","type":"text","chunk":"gg"}",
+  "{"operate":"append","type":"paragraph","chunk":"g"}",
+  "{"operate":"append","type":"paragraph","chunk":"gg"}",
   "{"operate":"blockOpen","type":"italicOpen","chunk":"*"}",
   "{"operate":"append","type":"italic","chunk":"xxxx"}",
   "{"operate":"append","type":"italicClose","chunk":"*"}",
@@ -24,7 +24,7 @@ exports[`basic  italic 1`] = `
 
 exports[`italic with * 1`] = `
 [
-  "{"operate":"blockOpen","type":"text","chunk":"aaa"}",
+  "{"operate":"blockOpen","type":"paragraph","chunk":"aaa"}",
   "{"operate":"append","type":"italicOpen","chunk":"*"}",
   "{"operate":"append","type":"inlineCodeOpen","chunk":"\`"}",
   "{"operate":"append","type":"inlineCode","chunk":"bar"}",
@@ -35,13 +35,13 @@ exports[`italic with * 1`] = `
   "{"operate":"append","type":"inlineCode","chunk":"zzz"}",
   "{"operate":"append","type":"inlineCodeClose","chunk":"\`"}",
   "{"operate":"append","type":"italicClose","chunk":"*"}",
-  "{"operate":"append","type":"text","chunk":"bbb"}",
+  "{"operate":"append","type":"paragraph","chunk":"bbb"}",
 ]
 `;
 
 exports[`italic with inline code 1`] = `
 [
-  "{"operate":"blockOpen","type":"text","chunk":"aaa"}",
+  "{"operate":"blockOpen","type":"paragraph","chunk":"aaa"}",
   "{"operate":"append","type":"italicOpen","chunk":"*"}",
   "{"operate":"append","type":"inlineCodeOpen","chunk":"\`"}",
   "{"operate":"append","type":"inlineCode","chunk":"bar"}",
@@ -52,13 +52,13 @@ exports[`italic with inline code 1`] = `
   "{"operate":"append","type":"inlineCode","chunk":"zzz"}",
   "{"operate":"append","type":"inlineCodeClose","chunk":"\`"}",
   "{"operate":"append","type":"italicClose","chunk":"*"}",
-  "{"operate":"append","type":"text","chunk":"bbb"}",
+  "{"operate":"append","type":"paragraph","chunk":"bbb"}",
 ]
 `;
 
 exports[`italic with inline code 2`] = `
 [
-  "{"operate":"blockOpen","type":"text","chunk":"aaa"}",
+  "{"operate":"blockOpen","type":"paragraph","chunk":"aaa"}",
   "{"operate":"append","type":"italicOpen","chunk":"*"}",
   "{"operate":"append","type":"inlineCodeOpen","chunk":"\`"}",
   "{"operate":"append","type":"inlineCode","chunk":"bar"}",
@@ -69,6 +69,6 @@ exports[`italic with inline code 2`] = `
   "{"operate":"append","type":"inlineCode","chunk":"zzz"}",
   "{"operate":"append","type":"inlineCodeClose","chunk":"\`"}",
   "{"operate":"append","type":"italicClose","chunk":"*"}",
-  "{"operate":"append","type":"text","chunk":"bbb"}",
+  "{"operate":"append","type":"paragraph","chunk":"bbb"}",
 ]
 `;

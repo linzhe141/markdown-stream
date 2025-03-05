@@ -14,8 +14,8 @@ export async function createMarkdownStreamRender(
 
   const stack: Element[] = [];
   const {
-    createText,
-    createTextContainer,
+    createParagraph,
+    createParagraphContainer,
     createCodeBlock,
     createHeading,
     createInlineCode,
@@ -30,10 +30,9 @@ export async function createMarkdownStreamRender(
     const { type, chunk, operate } = value as ChunkData;
     if (operate === "blockOpen") {
       switch (type) {
-        case "text": {
-          const dom = createText();
+        case "paragraphOpen": {
+          const dom = createParagraph();
           stack.push(dom);
-          dom.textContent = value.chunk;
           container.appendChild(dom);
           break;
         }
@@ -44,7 +43,7 @@ export async function createMarkdownStreamRender(
           break;
         }
         case "inlineCodeOpen": {
-          const t = createTextContainer();
+          const t = createParagraphContainer();
           const dom = createInlineCode();
           t.appendChild(dom);
           stack.push(t);
@@ -53,7 +52,7 @@ export async function createMarkdownStreamRender(
           break;
         }
         case "italicOpen": {
-          const t = createTextContainer();
+          const t = createParagraphContainer();
           const dom = createItalic();
           t.appendChild(dom);
           stack.push(t);
@@ -62,7 +61,7 @@ export async function createMarkdownStreamRender(
           break;
         }
         case "strongOpen": {
-          const t = createTextContainer();
+          const t = createParagraphContainer();
           const dom = createStrong();
           t.appendChild(dom);
           stack.push(t);

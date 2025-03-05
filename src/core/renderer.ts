@@ -1,8 +1,8 @@
 export const renderer = {
-  createTextContainer: () => {
+  createParagraphContainer: () => {
     return document.createElement("p") as Element;
   },
-  createText: () => {
+  createParagraph: () => {
     return document.createElement("p") as Element;
   },
   createHeading: (type: number) => {
