@@ -30,29 +30,7 @@ export type State =
 
 export type ChunkData = {
   operate: "blockOpen" | "append";
-  type:
-    | "newLine"
-    | "text"
-    | "codeBlockOpen"
-    | "codeBlockMeta"
-    | "codeBlock"
-    | "codeBlockClose"
-    | "headingType"
-    | "headingContent"
-    | "inlineCodeOpen"
-    | "inlineCode"
-    | "inlineCodeClose"
-    | "italicOpen"
-    | "italic"
-    | "italicClose"
-    | "strongOpen"
-    | "strong"
-    | "strongClose"
-    | "listOpen"
-    | "listItemOpen"
-    | "listItemClose"
-    | "listItemContent"
-    | "listClose";
+  type: State;
   chunk: string;
 };
 export class StreamTokenizer {
