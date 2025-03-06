@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import { onMounted, ref } from "vue";
-import { md, md1 } from "./md";
 import {
   createMarkdownStreamRender,
   getMarkdownStreamAst,
@@ -35,6 +34,8 @@ function createStream(text: string, chunkSize = 10, delay = 50) {
 async function clickHandle() {
   if (disabled.value) return;
   disabled.value = true;
+  const res = await fetch("./md.md");
+  const md = await res.text();
   const stream = createStream(md);
   const containerDom = container.value!;
   containerDom.innerHTML = "";
