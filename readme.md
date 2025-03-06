@@ -46,22 +46,24 @@ processMarkdownStreamChunk(stream, (ast) => {
 > [!IMPORTANT]
 > the `ast` in processMarkdownStreamChunk above
 
-```json
-  "{"operate":"blockOpen","type":"italicOpen","chunk":"*"}",
-  "{"operate":"append","type":"italic","chunk":"foo"}",
-  "{"operate":"append","type":"inlineCodeOpen","chunk":"\`"}",
-  "{"operate":"append","type":"inlineCode","chunk":"bar"}",
-  "{"operate":"append","type":"inlineCodeClose","chunk":"\`"}",
-  "{"operate":"append","type":"italic","chunk":"zzzzzzzz"}",
-  "{"operate":"append","type":"italicClose","chunk":"*"}",
-  "{"operate":"append","type":"text","chunk":"g"}",
-  "{"operate":"append","type":"text","chunk":"gg"}",
-  "{"operate":"blockOpen","type":"italicOpen","chunk":"*"}",
-  "{"operate":"append","type":"italic","chunk":"xxxx"}",
-  "{"operate":"append","type":"italicClose","chunk":"*"}",
-  "{"operate":"blockOpen","type":"italicOpen","chunk":"*"}",
-  "{"operate":"append","type":"inlineCodeOpen","chunk":"\`"}",
-  "{"operate":"append","type":"inlineCode","chunk":"linzhe"}",
-  "{"operate":"append","type":"inlineCodeClose","chunk":"\`"}",
-  "{"operate":"append","type":"italicClose","chunk":"*"}",
+```js
+// md: aaa*\`bar\` foo \`zzz\`*bbb
+// chunkSize=10: ['aaa*`bar` ', 'foo `zzz`*', 'bbb']
+
+processMarkdownStreamChunk(stream, (ast) => {
+  console.log(ast);
+});
+// "{"operate":"blockOpen","type":"paragraphOpen","chunk":"paragraphOpen"}",
+// "{"operate":"append","type":"text","chunk":"aaa"}",
+// "{"operate":"append","type":"italicOpen","chunk":"*"}",
+// "{"operate":"append","type":"inlineCodeOpen","chunk":"\`"}",
+// "{"operate":"append","type":"inlineCode","chunk":"bar"}",
+// "{"operate":"append","type":"inlineCodeClose","chunk":"\`"}",
+// "{"operate":"append","type":"italic","chunk":" "}",
+// "{"operate":"append","type":"italic","chunk":"foo "}",
+// "{"operate":"append","type":"inlineCodeOpen","chunk":"\`"}",
+// "{"operate":"append","type":"inlineCode","chunk":"zzz"}",
+// "{"operate":"append","type":"inlineCodeClose","chunk":"\`"}",
+// "{"operate":"append","type":"italicClose","chunk":"*"}",
+// "{"operate":"append","type":"text","chunk":"bbb"}",
 ```
