@@ -3,7 +3,7 @@
 > [!IMPORTANT]
 > Just a toy
 >
-> `markdown-streamx` does not check whether the input is a complete and correct
+> `markdown-streamx` does not check whether the input is a complete and correct，so you must ensure that the markdown you enter is normal and there is no strange usage.
 
 Tranform a stream of Markdown into HTML
 
