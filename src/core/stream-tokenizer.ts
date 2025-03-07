@@ -130,6 +130,10 @@ export class StreamTokenizer {
     let index = 0;
     while (index < chunk.length) {
       const c = chunk[index];
+      if (c === "\r") {
+        index++;
+        continue;
+      }
       switch (this.state) {
         case "newBlock": {
           this.stateNewBlock(c, index, chunk);
@@ -228,7 +232,7 @@ export class StreamTokenizer {
     this.chunkTypeStack = [];
     this.completeChunks = [];
     this.completeChunkItem = [];
-    if (c === "\n" || c === "\r") return;
+    if (c === "\n") return;
     if (c === "-") {
       this.enqueue("listOpen", "listOpen");
       this.completeChunks.push("listOpen");
@@ -260,7 +264,7 @@ export class StreamTokenizer {
   }
 
   stateMaybeNewBlock(c: string, index: number, chunk: string) {
-    if (c === "\n" || c === "\r") {
+    if (c === "\n") {
       this.completeChunkItem.push(c);
       if (this.newLineIndex === 1) {
         this.state = "newBlock";
@@ -306,7 +310,7 @@ export class StreamTokenizer {
   }
 
   stateText(c: string, index: number, chunk: string) {
-    if (c === "\n" || c === "\r") {
+    if (c === "\n") {
       this.processPossiblePreviousChunk("text");
 
       this.state = "maybeNewBlock";
@@ -480,8 +484,7 @@ export class StreamTokenizer {
   }
 
   stateCodeBlockMeta(c: string) {
-    // 防止多插入一个"\r"
-    if (c === "\n" /* || c === "\r" */) {
+    if (c === "\n") {
       this.processPossiblePreviousChunk("codeBlockMeta");
 
       this.state = "codeBlock";
@@ -538,7 +541,7 @@ export class StreamTokenizer {
   }
 
   stateHeadingContent(c: string, index: number, chunk: string) {
-    if (c === "\n" || c === "\r") {
+    if (c === "\n") {
       this.state = "newBlock";
       this.processPossiblePreviousChunk("headingContent");
     } else if (isSpecialInlineCharOpen(c)) {
@@ -563,7 +566,7 @@ export class StreamTokenizer {
   }
 
   stateListItemContent(c: string, index: number, chunk: string) {
-    if (c === "\n" || c === "\r") {
+    if (c === "\n") {
       this.processPossiblePreviousChunk("listItemContent");
 
       this.enqueue("listItemClose", "listItemClose");
