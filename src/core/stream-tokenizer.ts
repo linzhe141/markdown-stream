@@ -28,14 +28,14 @@ export type State =
   | "listItemContent"
   | "listItemClose"
   | "listClose"
-  | "maybeListClose";
+  | "maybeListClose"
+  | "maybeNestedList";
 
 export type ChunkData = {
   operate: "blockOpen" | "append";
   type: State;
   chunk: string;
 };
-
 function isSpecialInlineCharOpen(c: string) {
   return c === "_" || c === "*" || c === "`";
 }
@@ -49,6 +49,8 @@ export class StreamTokenizer {
   newLineIndex = 0;
   strongIndex = 0;
   headingIndex = 0;
+  listItemSpaceStack: number[] = [];
+  listItemSpace = 0;
   controller: TransformStreamDefaultController = null!;
 
   // 当是一个 paragraph 的 newBlock, 向ast中加入一个paragraphOpen标识
@@ -75,7 +77,7 @@ export class StreamTokenizer {
       this.processPossiblePreviousChunk(prevChunkType);
 
       this.state = "italicOpen";
-      this.stateInlineCodeOpen(c);
+      this.stateItalicOpen(c);
     } else if (c === "`") {
       this.processPossiblePreviousChunk(prevChunkType);
 
@@ -144,7 +146,7 @@ export class StreamTokenizer {
           break;
         }
         case "listItemOpen": {
-          this.stateListItemOpen(c, index, chunk);
+          this.stateListItemOpen(c);
           break;
         }
         case "listItemContent": {
@@ -153,6 +155,10 @@ export class StreamTokenizer {
         }
         case "maybeListClose": {
           this.stateMaybeListClose(c, index, chunk);
+          break;
+        }
+        case "maybeNestedList": {
+          this.stateMaybeNestedList(c);
           break;
         }
         case "text": {
@@ -237,8 +243,9 @@ export class StreamTokenizer {
       this.enqueue("listOpen", "listOpen");
       this.completeChunks.push("listOpen");
 
+      this.listItemSpaceStack.push(this.listItemSpace);
       this.state = "listItemOpen";
-      this.stateListItemOpen(c, index, chunk);
+      this.stateListItemOpen(c);
     } else if (c === "#") {
       this.state = "headingType";
       this.headingIndex = 0;
@@ -283,7 +290,7 @@ export class StreamTokenizer {
       this.resetChunkDataWhenAsNewBlock();
 
       this.state = "listItemOpen";
-      this.stateListItemOpen(c, index, chunk);
+      this.stateListItemOpen(c);
     } else if (c === "#") {
       this.resetChunkDataWhenAsNewBlock();
 
@@ -335,7 +342,7 @@ export class StreamTokenizer {
   }
 
   stateInlineCode(c: string, index: number, chunk: string) {
-    if (c === "`" || c === "_") {
+    if (c === "`") {
       this.processPossiblePreviousChunk("inlineCode");
 
       this.state = "inlineCodeClose";
@@ -365,7 +372,7 @@ export class StreamTokenizer {
   }
 
   stateItalic(c: string, index: number, chunk: string) {
-    if (c === "*") {
+    if (c === "*" || c === "_") {
       this.processPossiblePreviousChunk("italic");
 
       this.state = "italicClose";
@@ -554,7 +561,7 @@ export class StreamTokenizer {
     }
   }
 
-  stateListItemOpen(c: string, index: number, chunk: string) {
+  stateListItemOpen(c: string) {
     if (c === "-") {
       this.completeChunkItem.push(c);
     } else if (c === " ") {
@@ -573,6 +580,7 @@ export class StreamTokenizer {
       this.completeChunks.push("listItemClose");
 
       this.state = "maybeListClose";
+      this.listItemSpace = 0;
     } else if (isSpecialInlineCharOpen(c)) {
       this.processSpecialInlineState("listItemContent", c, index, chunk);
     } else {
@@ -585,16 +593,46 @@ export class StreamTokenizer {
   }
 
   stateMaybeListClose(c: string, index: number, chunk: string) {
-    if (c === "-") {
-      this.state = "listItemOpen";
-      this.stateListItemOpen(c, index, chunk);
+    if (c === " " || c === "-") {
+      this.state = "maybeNestedList";
+      this.stateMaybeNestedList(c);
     } else {
       this.enqueue("listClose", "listClose");
       this.completeChunks.push("listClose");
 
+      this.listItemSpaceStack.pop();
       // new Block
       this.state = "newBlock";
       this.stateNewBlock(c, index, chunk);
+    }
+  }
+
+  stateMaybeNestedList(c: string) {
+    if (c === " ") {
+      this.listItemSpace++;
+    } else if (c === "-") {
+      const prevListItemSpace = this.listItemSpaceStack.at(-1)!;
+
+      if (this.listItemSpace - prevListItemSpace === 2) {
+        this.enqueue("listOpen", "listOpen");
+        this.completeChunks.push("listOpen");
+
+        this.listItemSpaceStack.push(this.listItemSpace);
+
+        this.state = "listItemOpen";
+        this.stateListItemOpen(c);
+      } else if (this.listItemSpace === prevListItemSpace) {
+        this.state = "listItemOpen";
+        this.stateListItemOpen(c);
+      } else if (prevListItemSpace - 2 === this.listItemSpace) {
+        this.enqueue("listClose", "listClose");
+        this.completeChunks.push("listClose");
+
+        this.listItemSpaceStack.pop();
+
+        this.state = "listItemOpen";
+        this.stateListItemOpen(c);
+      }
     }
   }
 }

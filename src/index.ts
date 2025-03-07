@@ -155,7 +155,12 @@ export async function createMarkdownStreamRender(
             stack.pop();
             break;
           }
-
+          case "listOpen": {
+            const dom = createList();
+            last.appendChild(dom);
+            stack.push(dom);
+            break;
+          }
           case "listItemOpen": {
             const listItem = createListItem();
             last.appendChild(listItem);

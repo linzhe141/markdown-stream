@@ -22,7 +22,6 @@ function createStream(text: string, chunkSize = 10, delay = 50) {
 
           const chunk = text.slice(position, position + chunkSize);
           position += chunkSize;
-
           controller.enqueue(chunk);
 
           resolve();
