@@ -21,7 +21,7 @@ async function procressFoo() {
   // const response = await fetch("/api/chat", {
   //   method: "POST",
   //   body: JSON.stringify({
-  //     question: "使用vue3写一个 v-for demo",
+  //     question: "Write a v-for demo using Vue 3",
   //   }),
   // });
   // const markdownStream = response.body;

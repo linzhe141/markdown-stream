@@ -1,11 +1,11 @@
-好的！下面 Vue 3 的简单 `v-for` 示例。这个示例会遍历一个数组，并将数组中的每一项渲染为一个列表项。
+Sure! Below is a simple `v-for` example in Vue 3. This example iterates over an array and renders each item in the array as a list item.
 
-# 代码示例 _vue3 todo list_
+# Code Example _vue3 todo list_
 
 ```html filename="app.vue"
 <template>
   <div>
-    <h1>Vue 3 v-for 示例</h1>
+    <h1>Vue 3 v-for Example</h1>
     <ul>
       <li v-for="(item, index) in items" :key="index">
         {{ index + 1 }}. {{ item }}
@@ -19,8 +19,8 @@
 
   export default {
     setup() {
-      // 定义一个包含字符串的数组
-      const items = ref(["苹果", "香蕉", "橙子", "葡萄", "芒果"]);
+      // Define an array of strings
+      const items = ref(["Apple", "Banana", "Orange", "Grape", "Mango"]);
 
       return {
         items,
@@ -30,7 +30,7 @@
 </script>
 
 <style>
-  /* 简单的样式 */
+  /* Simple styles */
   ul {
     list-style-type: none;
     padding: 0;
@@ -42,28 +42,28 @@
 </style>
 ```
 
-### 代码说明
+### Code Explanation
 
-- **`v-for` 指令**：`v-for` 用于遍历数组 `items`，并将每个元素渲染为一个 `<li>` 标签。
-  - _支持嵌套的list_
-- **`key` 属性**：`key` 是 Vue 用于跟踪每个节点的唯一标识，这里使用 `index` 作为 `key`。
-  - _支持嵌套的list_
-  - _支持嵌套的list_
-    - _支持嵌套的list_
-  - _支持嵌套的list_
-- **`ref`**：使用 `ref` 创建一个响应式数组 `items`。
-- **模板**：在模板中渲染一个标题和一个无序列表，列表项的内容是数组中的每个元素。
+- **`v-for` directive**: `v-for` is used to iterate over the `items` array and render each element as an `<li>` tag.
+  - _Supports nested lists_
+- **`key` attribute**: `key` is a unique identifier used by Vue to track each node. Here, `index` is used as the `key`.
+  - _Supports nested lists_
+  - _Supports nested lists_
+    - _Supports nested lists_
+  - _Supports nested lists_
+- **`ref`**: `ref` is used to create a reactive array `items`.
+- **Template**: The template renders a title and an unordered list, with each list item displaying an element from the array.
 
-### 运行效果
+### Running Effect
 
-页面会显示一个标题和一个列表，列表项为：
+The page will display a title and a list with the following items:
 
 ```
-1. 苹果
-2. 香蕉
-3. 橙子
-4. 葡萄
-5. 芒果
+1. Apple
+2. Banana
+3. Orange
+4. Grape
+5. Mango
 ```
 
-你可以根据需要修改 `items` 数组的内容，列表会自动更新。希望这个示例对你有帮助！如果有其他问题，随时问我哦！
+You can modify the contents of the `items` array as needed, and the list will automatically update. I hope this example is helpful! If you have any other questions, feel free to ask!
